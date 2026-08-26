@@ -1,0 +1,91 @@
+generated: '2026-08-26'
+method: probed
+source: https://ossio.io/.well-known/oauth-authorization-server, https://ossio.io/.well-known/oauth-protected-resource, https://ossio.io/wp-json/mcp
+name: OSSIO Standards Conformance
+description: >-
+  Cross-cutting standards asserted against what OSSIO actually serves. The only contract
+  OSSIO publishes is the OAuth/MCP surface on its WordPress site, so that is the only
+  place conformance can be measured. No OpenAPI, AsyncAPI, GraphQL, gRPC or WSDL contract
+  exists to assert anything further against.
+standards:
+- id: oauth2
+  conforms: true
+  evidence: >-
+    /.well-known/oauth-authorization-server returns HTTP 200 with an RFC 6749
+    authorization_code + refresh_token grant profile, authorization/token/revocation
+    endpoints, and response_types_supported ["code"].
+- id: rfc8414
+  name: OAuth 2.0 Authorization Server Metadata
+  conforms: true
+  evidence: >-
+    https://ossio.io/.well-known/oauth-authorization-server -> HTTP 200 application/json
+    with issuer, authorization_endpoint, token_endpoint, response_types_supported,
+    grant_types_supported. Saved verbatim to well-known/ossio-oauth-authorization-server.json.
+- id: rfc9728
+  name: OAuth 2.0 Protected Resource Metadata
+  conforms: true
+  evidence: >-
+    https://ossio.io/.well-known/oauth-protected-resource -> HTTP 200 naming resource
+    https://ossio.io/wp-json/mcp/mcp-oauth-server, authorization_servers
+    ["https://ossio.io"], bearer_methods_supported ["header"], scopes_supported ["mcp"].
+- id: rfc9728-challenge
+  name: WWW-Authenticate resource_metadata parameter
+  conforms: true
+  evidence: >-
+    The 401 from https://ossio.io/wp-json/mcp/mcp-oauth-server returns
+    'WWW-Authenticate: Bearer realm="https://ossio.io",
+    resource_metadata="https://ossio.io/.well-known/oauth-protected-resource"', giving a
+    client the full discovery path from the challenge alone.
+- id: rfc7636
+  name: PKCE
+  conforms: true
+  evidence: code_challenge_methods_supported ["S256"] in the RFC 8414 metadata document.
+- id: rfc7009
+  name: OAuth 2.0 Token Revocation
+  conforms: true
+  evidence: revocation_endpoint https://ossio.io/oauth/revoke advertised in RFC 8414 metadata.
+- id: mcp
+  name: Model Context Protocol
+  conforms: true
+  evidence: >-
+    /wp-json/mcp lists two registered MCP servers accepting POST/GET/DELETE; both answer
+    JSON-RPC with an MCP-shaped 401 (mcp_unauthorized) rather than a generic HTTP error.
+    Protocol version could not be read — initialize is auth-gated.
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration returns HTTP 404 (site HTML 404 template).
+- id: rfc9457
+  name: Problem Details for HTTP APIs
+  conforms: false
+  evidence: >-
+    Error bodies are the WordPress REST envelope {code, message, data.status}, not
+    application/problem+json.
+- id: rfc9116
+  name: security.txt
+  conforms: false
+  evidence: /.well-known/security.txt returns HTTP 404.
+- id: rfc8615
+  name: Well-Known URIs
+  conforms: true
+  evidence: Two real documents served under /.well-known/ on ossio.io.
+domain_standard:
+  sector: health / medical devices
+  candidates_checked:
+  - fhir
+  - hl7-v2
+  - dicom
+  - us-core
+  - gs1-udi
+  declared: false
+  evidence: >-
+    No contract of any kind declares a health-sector standard. OSSIO sells physical
+    orthopedic implants and holds FDA 510(k) clearances for them; it operates no clinical
+    data, EHR or interoperability surface, so no FHIR/HL7/DICOM/UDI conformance is claimed
+    or expected. REWARD-ONLY dimension: recorded as absent, not as a failure.
+compliance_certifications:
+  found: false
+  note: >-
+    No trust center, SOC 2, ISO 27001 or HIPAA attestation page is published. Regulatory
+    clearances OSSIO does publish (FDA 510(k) for OSSIOfiber product families) are medical
+    device clearances, not API/security compliance programs, so no Compliance pointer is
+    emitted.

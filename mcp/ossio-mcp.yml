@@ -1,0 +1,78 @@
+generated: '2026-08-26'
+method: probed
+source: https://ossio.io/wp-json/mcp
+name: OSSIO Site MCP Server
+description: >-
+  ossio.io mounts a live Model Context Protocol server under the WordPress REST API at
+  /wp-json/mcp/. Two servers are registered — mcp-oauth-server (OAuth-protected, the one
+  named by the RFC 9728 protected-resource document) and mcp-adapter-default-server
+  (cookie/application-password protected). Both are real endpoints served by OSSIO's own
+  host; both reject anonymous JSON-RPC, so the tool list could not be enumerated.
+deployment:
+  mode: remote
+  endpoint: https://ossio.io/wp-json/mcp/mcp-oauth-server
+  install: null
+  package: null
+  auth: oauth
+  verified: probed
+servers:
+- id: mcp-oauth-server
+  endpoint: https://ossio.io/wp-json/mcp/mcp-oauth-server
+  transport: streamable-http
+  methods:
+  - POST
+  - GET
+  - DELETE
+  auth: oauth
+  auth_metadata: https://ossio.io/.well-known/oauth-protected-resource
+  probe:
+    method: tools/list
+    http_status: 401
+    body: '{"code":"mcp_unauthorized","message":"MCP authentication required.","data":{"status":401}}'
+  www_authenticate: >-
+    Bearer realm="https://ossio.io",
+    resource_metadata="https://ossio.io/.well-known/oauth-protected-resource"
+  www_authenticate_note: >-
+    The 401 returns the RFC 9728 resource_metadata parameter, so an MCP client can
+    discover the authorization server from the challenge alone without out-of-band
+    configuration. This is the correct, spec-complete discovery path.
+  probe_initialize:
+    method: initialize
+    http_status: 401
+    body: '{"code":"mcp_unauthorized","message":"MCP authentication required.","data":{"status":401}}'
+- id: mcp-adapter-default-server
+  endpoint: https://ossio.io/wp-json/mcp/mcp-adapter-default-server
+  transport: streamable-http
+  methods:
+  - POST
+  - GET
+  - DELETE
+  auth: api-key
+  auth_note: >-
+    Rejects with WordPress rest_forbidden, i.e. it expects a logged-in cookie/nonce or a
+    WordPress application password rather than an OAuth bearer token.
+  probe:
+    method: tools/list
+    http_status: 401
+    body: '{"code":"rest_forbidden","message":"Sorry, you are not allowed to do that.","data":{"status":401}}'
+tools:
+  status: gated
+  count: null
+  note: >-
+    NOT ENUMERATED. tools/list returns 401 on both servers and no llms.txt or public tool
+    reference is published, so no tool names are recorded here. The backing ability
+    registry at /wp-json/wp-abilities/v1/abilities is likewise 401. Establishing the tool
+    surface requires an authenticated OAuth introspection pass. No tools are guessed.
+implementation:
+  stack: WordPress
+  adapter: WordPress MCP Adapter (mcp namespace + wp-abilities/v1 ability registry)
+  evidence: https://ossio.io/wp-json/ namespaces include "mcp" and "wp-abilities/v1"
+  caveat: >-
+    This is a site-content MCP surface exposed by OSSIO's marketing CMS, not a product API
+    for OSSIOfiber implants. OSSIO publishes no product API, OpenAPI or developer program.
+ownership:
+  verdict: confirmed
+  rationale: >-
+    The endpoint, the RFC 8414 issuer and the RFC 9728 resource all name https://ossio.io,
+    the company's own primary domain (ossio.com is an unrelated personal site belonging to
+    Daniel Ossio). Nothing here points at a sibling brand or a third party.

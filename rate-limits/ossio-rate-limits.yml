@@ -1,0 +1,25 @@
+generated: '2026-08-26'
+method: probed
+source: https://ossio.io/wp-json/mcp/mcp-oauth-server
+name: OSSIO Rate Limits
+description: >-
+  OSSIO documents no rate limits. There is no developer portal or API reference in which
+  to publish them. Live unauthenticated responses from the one API surface it serves — the
+  WordPress REST/MCP endpoints — carry no rate-limit headers at all, so an agent gets no
+  runtime signal either.
+limit_count: 0
+limits: []
+headers:
+  observed: []
+  note: >-
+    Probed responses from https://ossio.io/wp-json/, /wp-json/mcp and
+    /wp-json/mcp/mcp-oauth-server return no X-RateLimit-*, no RateLimit-* and no
+    Retry-After header. Cloudflare/host-level throttling may exist but is not advertised.
+exhaustion_status: null
+evidence:
+- url: https://ossio.io/wp-json/mcp/mcp-oauth-server
+  status: 401
+  note: Anonymous JSON-RPC POST; no rate-limit headers on the response.
+- url: https://ossio.io/wp-json/
+  status: 200
+  note: Anonymous GET of the REST root; no rate-limit headers on the response.

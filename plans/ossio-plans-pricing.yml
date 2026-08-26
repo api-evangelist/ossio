@@ -1,0 +1,27 @@
+generated: '2026-08-26'
+method: searched
+source: https://ossio.io/
+name: OSSIO Plans and Pricing
+description: >-
+  OSSIO publishes no pricing of any kind — no API plans, no product list price, no
+  developer tiers. It sells OSSIOfiber implants to hospitals and surgery centers through a
+  direct sales force and group-purchasing contracts (a Vizient contract is announced in its
+  press releases); the only commercial call to action on the site is a contact form and a
+  phone number. There is no API product to price.
+plan_count: 0
+plans: []
+pricing_url: null
+sales_model: direct-sales-and-gpo-contract
+contact: https://ossio.io/contact/
+evidence:
+- url: https://ossio.io/
+  status: 200
+  note: No pricing link in the site navigation.
+- url: https://ossio.io/page-sitemap.xml
+  status: 200
+  note: >-
+    Complete page sitemap contains no pricing, plans, or developer page — only patient,
+    surgeon, product, press and legal pages.
+- url: https://ossio.io/contact/
+  status: 200
+  note: Contact form and phone (833-781-7373) stand in for any commercial surface.

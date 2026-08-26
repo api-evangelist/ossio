@@ -1,0 +1,61 @@
+generated: '2026-08-26'
+method: probed
+source: https://ossio.io/.well-known/
+name: OSSIO Well-Known Documents
+description: >-
+  Probe of the RFC 8615 /.well-known/ namespace on every OSSIO host. ossio.io serves two
+  real documents — an RFC 8414 OAuth 2.0 authorization server metadata document and an
+  RFC 9728 OAuth 2.0 protected resource metadata document — both emitted by the WordPress
+  MCP OAuth adapter that fronts the site MCP server. Every other probed path returns the
+  site's HTML 404 template.
+hosts:
+- host: ossio.io
+  documents:
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: ossio-oauth-authorization-server.json
+    note: >-
+      301 to the trailing-slash form, which returns application/json RFC 8414 metadata.
+      issuer https://ossio.io, PKCE S256 required, scopes_supported ["mcp"].
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: ossio-oauth-protected-resource.json
+    note: >-
+      RFC 9728 metadata naming https://ossio.io/wp-json/mcp/mcp-oauth-server as the
+      protected resource, with ossio.io as its authorization server.
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+- host: resources.ossio.io
+  documents:
+  - path: /.well-known/security.txt
+    status: 301
+    file: null
+    note: Host is a 301 alias; every path redirects to https://ossio.io/resources.
+  - path: /.well-known/api-catalog
+    status: 301
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 301
+    file: null
+notes:
+- No security.txt is served, so no SecurityTxt pointer is emitted.
+- No api-catalog is served; the WellKnown pointer rests on the two OAuth documents above.
+- >-
+  api.ossio.io, developer.ossio.io and developers.ossio.io do not resolve (DNS failure,
+  curl exit 6), so there is no separate API or developer host to probe.

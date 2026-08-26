@@ -1,18 +1,53 @@
 aid: ossio
 name: OSSIO
-description: 'OSSIO is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  OSSIO is an orthopedic fixation medical device company headquartered in Woburn,
+  Massachusetts and founded in Israel in 2014. It develops and sells OSSIOfiber, a
+  bio-integrative, metal-free implant material used for screws, suture anchors, staples,
+  bone pins and trimmable fixation nails in foot and ankle, hand and wrist, sports
+  medicine and pediatric procedures. OSSIO ships physical implants, not software, and
+  publishes no developer program, no product API and no OpenAPI. Its one machine-readable
+  surface is the corporate website itself: ossio.io runs WordPress with the MCP Adapter
+  installed, exposing an OAuth-protected Model Context Protocol server plus RFC 8414 and
+  RFC 9728 metadata documents at /.well-known/ — a site-content agent surface, not a
+  product API.
 url: https://raw.githubusercontent.com/api-evangelist/ossio/refs/heads/main/apis.yml
+image: https://ossio.io/wp-content/uploads/2023/04/social.png
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-26'
 modified: '2026-08-26'
 tags:
 - Company
-apis: []
+- Medical Devices
+- Health
+- Orthopedics
+- Life Sciences
+- Manufacturing
+- MCP
+- Agents
+apis:
+- name: OSSIO Site MCP Server
+  description: >-
+    An OAuth-protected Model Context Protocol server mounted on OSSIO's WordPress
+    corporate site at /wp-json/mcp/mcp-oauth-server, discoverable through the site's RFC
+    9728 protected-resource document. It exposes site content and WordPress abilities to
+    agents; it is not an OSSIOfiber product API. tools/list returns HTTP 401 anonymously,
+    so the tool surface is auth-gated and was not enumerated.
+  humanURL: https://ossio.io/
+  baseURL: https://ossio.io/wp-json/mcp/mcp-oauth-server
+  tags:
+  - MCP
+  - Agents
+  - Content
+  properties:
+  - type: MCPServer
+    url: mcp/ossio-mcp.yml
+  - type: Authentication
+    url: authentication/ossio-authentication.yml
+  - type: OAuthScopes
+    url: scopes/ossio-scopes.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -20,4 +55,32 @@ maintainers:
   email: info@apis.io
 common:
 - type: Website
-  url: https://forgeglobal.com/ossio_stock/
+  url: https://ossio.io/
+- type: PrivacyPolicy
+  url: https://ossio.io/privacy-policy/
+- type: TermsOfService
+  url: https://ossio.io/ossio-sms-terms-of-service/
+- type: Support
+  url: https://ossio.io/contact/
+- type: Blog
+  url: https://ossio.io/press/
+- type: BlogRSS
+  url: https://ossio.io/feed/
+- type: WellKnown
+  url: well-known/ossio-well-known.yml
+- type: LLMsTxt
+  url: llms/ossio-llms.txt
+- type: Conformance
+  url: conformance/ossio-conformance.yml
+- type: DomainSecurity
+  url: security/ossio-domain-security.yml
+- type: Plans
+  url: plans/ossio-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/ossio-rate-limits.yml
+
+x-enrichment:
+  date: '2026-08-26'
+  status: enriched
+  artifacts_added: 11
+  pass: local-v1

@@ -1,0 +1,23 @@
+generated: '2026-08-26'
+method: probed
+source: https://ossio.io/.well-known/oauth-authorization-server
+name: OSSIO OAuth Scopes
+description: >-
+  The single OAuth scope OSSIO's authorization server advertises. Read from the RFC 8414
+  metadata document and corroborated by the RFC 9728 protected-resource document, which
+  advertises the same scopes_supported for the MCP endpoint. There is no published scope
+  or permission reference page — this is the complete declared scope surface.
+authorization_server: https://ossio.io
+docs: null
+scopes:
+- name: mcp
+  description: >-
+    Grants an OAuth client access to the OSSIO site MCP server at
+    https://ossio.io/wp-json/mcp/mcp-oauth-server. The provider publishes no further
+    description and no finer-grained scopes; what the scope actually permits could only be
+    established by an authenticated tools/list introspection.
+  source: /.well-known/oauth-authorization-server scopes_supported
+  applies_to: https://ossio.io/wp-json/mcp/mcp-oauth-server
+scope_count: 1
+notes:
+- No sub-scopes, no read/write split, no resource-scoped grants are advertised.

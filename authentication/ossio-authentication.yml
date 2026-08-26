@@ -1,0 +1,56 @@
+generated: '2026-08-26'
+method: probed
+source: https://ossio.io/.well-known/oauth-authorization-server
+name: OSSIO Authentication Profile
+description: >-
+  OSSIO publishes no product API and no developer authentication documentation. The one
+  authenticated surface it serves is the site MCP server, whose auth profile is fully
+  described by the RFC 8414 authorization-server metadata and RFC 9728 protected-resource
+  metadata documents saved in well-known/. Everything below is read from those documents.
+schemes:
+- id: oauth2_mcp
+  type: oauth2
+  flow: authorization_code
+  issuer: https://ossio.io
+  authorization_endpoint: https://ossio.io/oauth/authorize
+  token_endpoint: https://ossio.io/oauth/token
+  revocation_endpoint: https://ossio.io/oauth/revoke
+  response_types_supported:
+  - code
+  grant_types_supported:
+  - authorization_code
+  - refresh_token
+  pkce:
+    required: true
+    code_challenge_methods_supported:
+    - S256
+  token_endpoint_auth_methods_supported:
+  - none
+  client_registration:
+    dynamic: true
+    mechanism: client_id_metadata_document
+    note: >-
+      client_id_metadata_document_supported is true and token_endpoint_auth_methods_supported
+      is ["none"], i.e. public clients identified by a hosted client-metadata document
+      rather than a pre-registered secret. No RFC 7591 registration_endpoint is advertised.
+  scopes:
+  - mcp
+  applies_to:
+  - https://ossio.io/wp-json/mcp/mcp-oauth-server
+- id: wordpress_rest
+  type: apiKey
+  flow: null
+  note: >-
+    /wp-json/mcp/mcp-adapter-default-server, /wp-json/wp-abilities/v1/* and the private
+    WordPress REST routes reject anonymous calls with rest_forbidden (HTTP 401), i.e. they
+    expect a WordPress cookie+nonce or an application password. This is WordPress core
+    behaviour, not a documented OSSIO auth product.
+  applies_to:
+  - https://ossio.io/wp-json/mcp/mcp-adapter-default-server
+  - https://ossio.io/wp-json/wp-abilities/v1/abilities
+anonymous_surface:
+  note: >-
+    Parts of the WordPress REST API are readable anonymously (e.g. /wp-json/wp/v2/types,
+    HTTP 200). These are CMS content routes, not an OSSIO API product.
+docs: null
+docs_note: OSSIO publishes no authentication documentation page.
