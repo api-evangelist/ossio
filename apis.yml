@@ -74,6 +74,9 @@ apis:
     url: authentication/ossio-authentication.yml
   - type: OAuthScopes
     url: scopes/ossio-scopes.yml
+  x-surface: platform-generated
+  x-platform: wordpress
+  x-platform-surface: mcp-plugin
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
